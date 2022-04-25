@@ -1,0 +1,88 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2017-2022 Julb
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+syntax = "proto3";
+
+package julbme.search.v1;
+
+option csharp_namespace = "Julbme.Protobuf.Messages.Search.V1";
+option java_package = "me.julb.protobuf.messages.search.v1";
+option java_multiple_files = true;
+option java_outer_classname = "PredicateProtos";
+ 
+message PredicateGrpcDTO {
+  oneof predicate_type {
+    SingleValueAttributePredicate single_value_attribute_predicate = 1;
+    MultipleValuesAttributePredicate multiple_values_attribute_predicate = 2;
+    NoValueAttributePredicate no_value_attribute_predicate = 3;
+    AndPredicateGrpcDTO and_predicate = 4;
+    OrPredicateGrpcDTO or_predicate = 5;
+    NotPredicateGrpcDTO not_predicate = 6;
+  } 
+}
+
+message SingleValueAttributePredicate {
+  string name = 1;
+  OperatorAttributePredicateGrpc operator = 2;
+  string value = 3;
+}
+
+message MultipleValuesAttributePredicate {
+  string name = 1;
+  OperatorAttributePredicateGrpc operator = 2;
+  repeated string values = 3;
+}
+
+message NoValueAttributePredicate {
+  string name = 1;
+  OperatorAttributePredicateGrpc operator = 2;
+}
+
+message AndPredicateGrpcDTO {
+  repeated PredicateGrpcDTO predicates = 1;
+}
+
+message OrPredicateGrpcDTO {
+  repeated PredicateGrpcDTO predicates = 1;
+}
+
+message NotPredicateGrpcDTO {
+  PredicateGrpcDTO predicate = 1;
+}
+
+enum OperatorAttributePredicateGrpc {
+  EQUAL = 0;
+  NOT_EQUAL = 1;
+  LIKE = 2;
+  NOT_LIKE = 3;
+  STARTS_WITH = 4;
+  ENDS_WITH = 5;
+  GREATER_THAN = 6;
+  GREATER_OR_EQUAL_THAN = 7;
+  LESS_THAN = 8;
+  LESS_OR_EQUAL_THAN = 9;
+  IS_NULL = 10;
+  IS_NOT_NULL = 11;
+  IN = 12;
+  NOT_IN = 13;
+}
